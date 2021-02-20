@@ -1,0 +1,42 @@
+#My configuration adblock/privoxy				
+confdir C:\Users\hax4or\Desktop\privoxy
+logdir .
+actionsfile easylistprivacy.action
+actionsfile adblock.script.action
+actionsfile adfilter.action	
+filterfile adfilter.filter
+actionsfile filters.script.action
+actionsfile road-block-filters-light.script.action
+actionsfile gfwlist.action	
+actionsfile cnforward.action
+actionsfile road-block-filters-light.script.action
+actionsfile adold.action
+actionsfile road-kill-filters.script.action
+actionsfile social.action
+actionsfile noelemhide.action
+filterfile adold.filter			
+actionsfile default.action
+filterfile default.filter
+actionsfile easylist.action
+actionsfile ultimate.action
+actionsfile fanboy-cookiemonster.script.action
+filterfile user.filter								
+logfile privoxy.log
+listen-address 192.168.1.142:8118			
+toggle 1                                       
+enable-remote-toggle 0
+enable-remote-http-toggle 0	
+enable-edit-actions 0	
+enforce-blocks 1
+buffer-limit 4096				
+enable-proxy-authentication-forwarding 0	
+forwarded-connect-retries 1	
+accept-intercepted-requests 1
+allow-cgi-request-crunching 0
+split-large-forms 0				
+keep-alive-timeout 15		
+tolerate-pipelining 1
+socket-timeout 300	
+forward-socks5t / 127.0.0.1:9050 .						
+					
+					
