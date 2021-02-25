@@ -1,4 +1,4 @@
-var PROXY = 'HTTP 127.0.0.1:8118;SOCKS 127.0.0.1:9050';
+var PROXY = 'HTTP 127.0.0.1:8087;SOCKS 127.0.0.1:9050';
 var normal = 127.0.0.1:8118";                
 var blackhole_ip_port = "1.1.1.1:53";      
 var blackhole_ip_port = "127.0.0.1:8119";   
