@@ -27,7 +27,7 @@ function FindProxyForURL(url, host) {
         hostIP = dnsResolve(host);
     // IP could not be determined -> go to proxy
     if (hostIP == 0)
-        return "127.0.0.1:8118";
+        return "127.0.0.1:8443";
     // These 3 scopes are used only internally
     if (shExpMatch(hostIP, "92.53.*") ||
         shExpMatch(hostIP, "192.168.*") ||
