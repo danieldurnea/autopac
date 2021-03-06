@@ -3,7 +3,7 @@
 function FindProxyForURL(url, host) {
     // NetBIOS-names
     if (isPlainHostName(host))
-        return "127.0.0.1:8118";
+        return "127.0.0.1:8443";
     // change to lower case, if not already been done
     host = host.toLowerCase();
     // internal DNS-suffixes
