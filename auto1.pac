@@ -3,7 +3,7 @@
 function FindProxyForURL(url, host) {
     // NetBIOS-names
     if (isPlainHostName(host))
-        return "192.168.0.102:8443";
+        return "localhost:3128";
     // change to lower case, if not already been done
     host = host.toLowerCase();
     // internal DNS-suffixes
@@ -27,7 +27,7 @@ function FindProxyForURL(url, host) {
         hostIP = dnsResolve(host);
     // IP could not be determined -> go to proxy
     if (hostIP == 0)
-        return "192.168.0.102:8443";
+        return "192.168.0.102:3128";
     // These 3 scopes are used only internally
     if (shExpMatch(hostIP, "92.53.*") ||
         shExpMatch(hostIP, "192.168.*") ||
