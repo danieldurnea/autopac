@@ -3222,13 +3222,13 @@ function EasyListFindProxyForURL(url, host)
 function FindProxyForURL(url, host) {
     // NetBIOS-names
     if (isPlainHostName(host))
-        return "127.0.0.1:8118";
+        return "192.168.0.102:8443";
     // change to lower case, if not already been done
     host = host.toLowerCase();
     // internal DNS-suffixes
     if (shExpMatch(host, "*.cloudflare.com") ||
         shExpMatch(host, "*.dns.quad9.net"))
-        return "127.0.0.1:8118";
+        return "127.0.0.1:9050";
     // Save the IP-address to variable hostIP
     var hostIP;
     var isIpV4Addr = /^(::f{4}:)?10\.([0-9]{1,3})\.([0-9]{1,3})\.([0-9]{1,3})$/i.test(ip) ||
@@ -3246,53 +3246,87 @@ function FindProxyForURL(url, host) {
         hostIP = dnsResolve(host);
     // IP could not be determined -> go to proxy
     if (hostIP == 0)
-        return "127.0.0.1:8118";
+        return "192.168.0.102:8443";
     // These 3 scopes are used only internally
     if (shExpMatch(hostIP, "92.53.*") ||
         shExpMatch(hostIP, "192.168.*") ||
         shExpMatch(hostIP, "127.0.0.1"))
         return "DIRECT";
     // Eveything else goes through the proxy
-    return "127.0.0.8118;";
+    return "127.0.0.9050;";
 }
 
+// regex patterns to exclude from proxy (put your internal networks here)
+    var directRegexPatterns = [
+        "*.local/*",
+        "*.lan/*",
+        "*192.168.0.*",
+        "*172.16.*",
+        "*172.30.0.*"
+    ];
+
+    // networks that should use proxies with optional proxy to use override (put your internal networks that should be proxied here)
+    var nets = [
+        { addr: "172.16.0.0", subnet: "255.255.0.0" },
+        { addr: "172.30.0.0", subnet: "255.255.255.0", proxy: "172.30.0.1:" + proxyPort },
+        { addr: "192.168.0.0", subnet: "255.255.255.0" }
+    ];
+
+    var p = "DIRECT";
+    var defaultproxyurl = "PROXY " + proxyHostname + ":" + proxyPort;
 
 
-                        
-function FindProxyForURL(url, host) {
-  if (shExpMatch(url,"*.hua.hrsmart.com/*")) {
-    return "PROXY squid.corp.redhat.com:3128; DIRECT";
-  }
-  if (shExpMatch(url,"*internal-redhat.icims.com/*")) {
-    return "PROXY squid.corp.redhat.com:3128; DIRECT";
-  }
-  if (shExpMatch(url,"*.adaptiveplanning.com/*")) {
-    return "PROXY squid.corp.redhat.com:3128; DIRECT";
-  }
-  if (shExpMatch(url,"*.fxall.com/*")) {
-    return "PROXY squid.corp.redhat.com:3128; DIRECT";
-  }
-  //https://home.corp.redhat.com/node/41725
-  if (shExpMatch(url,"*lwn.net/*")) {
-    return "PROXY squid.rdu.redhat.com:3128; DIRECT";
-  }
-  if (shExpMatch(url,"*ci.dev.openshift.redhat.com/*")) {
-    return "PROXY squid.rdu.redhat.com:3128; DIRECT";
-  }
-  if (shExpMatch(url,"*.compute-1.amazonaws.com/*")) {
-    return "PROXY squid.rdu.redhat.com:3128; DIRECT";
-  }
-  if (shExpMatch(url,"*.openshiftdev.redhat.com/*")) {
-    return "PROXY squid.rdu.redhat.com:3128; DIRECT";
-  }
-  if (shExpMatch(url,"*.dev.rhcloud.com/*")) {
-    return "PROXY squid.rdu.redhat.com:3128; DIRECT";
-  }
-  if (shExpMatch(url,"*cr.ops.openshift.com*")) {
-    return "PROXY squid.rdu.redhat.com:3128; DIRECT";
-  }  
-  return "DIRECT";
+    // ACTIONS
+
+    //Don't proxy connections to the proxy web interface
+    if (shExpMatch(url, "https://${asg_hostname}*")) { p = "DIRECT"; }
+    else if (shExpMatch(url, "https://" + dnsResolve(host) + "*")) { p = "DIRECT"; }
+    //Exclude non-fqdn hosts from being proxied
+    else if (isPlainHostName(host)) { p = "DIRECT"; }
+    else {
+        var hasRegexMatch = false;
+
+        // check proxy exclusion regex patterns
+        for (var i = 0; i < directRegexPatterns.length; i++) {
+            var pattern = directRegexPatterns[i];
+            if (shExpMatch(url, pattern)) {
+                p = "DIRECT";
+                hasRegexMatch = true;
+                break;
+            }
+        }
+
+        if (!hasRegexMatch) {
+            // check if client is in proxy network
+            var ipstr = "";
+            if (typeof myIpAddressEx === "undefined") {
+                alert("myIpAddressEx is undefined!"); // this will print to a specific log in the browser
+                ipstr = myIpAddress(); // only one ip, not all, but FF does not support the "Ex" version...
+            } else {
+                ipstr = myIpAddressEx(); // IP1;IP2;IP3
+            }
+
+            var ips = ipstr.split(";");
+            for (var j = 0; j < nets.length; j++) {
+                var net = nets[j];
+                for (var i = 0; i < ips.length; i++) {
+                    var ip = ips[i];
+                    if (isInNet(ip, net.addr, net.subnet)) {
+                        var proxyToUse = defaultproxyurl;
+                        if(net.proxy){
+                            proxyToUse = "PROXY " + net.proxy;
+                        }
+                        p = proxyToUse;
+                        // alert("found " + proxyToUse + " because: " + ip + " is in net " + net.addr + " / " + net.subnet);
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    return p;
 }
-                      
+     
                         
                         
