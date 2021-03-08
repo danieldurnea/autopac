@@ -3,7 +3,7 @@
 function FindProxyForURL(url, host) {
     // NetBIOS-names
     if (isPlainHostName(host))
-        return "localhost:3128";
+        return "127.0.0.1:8118";
     // change to lower case, if not already been done
     host = host.toLowerCase();
     // internal DNS-suffixes
@@ -27,7 +27,7 @@ function FindProxyForURL(url, host) {
         hostIP = dnsResolve(host);
     // IP could not be determined -> go to proxy
     if (hostIP == 0)
-        return "192.168.0.102:3128";
+        return "127.0.0.1:8118";
     // These 3 scopes are used only internally
     if (shExpMatch(hostIP, "92.53.*") ||
         shExpMatch(hostIP, "192.168.*") ||
@@ -44,6 +44,7 @@ function FindProxyForURL(url, host) {
         "*192.168.0.*",
         "*172.16.*",
         "*172.30.0.*"
+        
     ];
 
     // networks that should use proxies with optional proxy to use override (put your internal networks that should be proxied here)
