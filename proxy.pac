@@ -1,44 +1,26 @@
-function FindProxyForURL(url, host) {
-    // NetBIOS-names
-    if (isPlainHostName(host))
-        return "127.0.0.1:8118";
-    // change to lower case, if not already been done
-    host = host.toLowerCase();
-    // internal DNS-suffixes
-    if (shExpMatch(host, "*.cloudflare.com") ||
-        shExpMatch(host, "*.dns.quad9.net"))
-        return "127.0.0.1:8118";
-    // Save the IP-address to variable hostIP
-    var hostIP;
-    var isIpV4Addr = /^(::f{4}:)?10\.([0-9]{1,3})\.([0-9]{1,3})\.([0-9]{1,3})$/i.test(ip) ||
-  /^(::f{4}:)?192\.168\.([0-9]{1,3})\.([0-9]{1,3})$/i.test(ip) ||
-  /^(::f{4}:)?172\.(1[6-9]|2\d|30|31)\.([0-9]{1,3})\.([0-9]{1,3})$/i.test(ip) ||
-  /^(::f{4}:)?127\.([0-9]{1,3})\.([0-9]{1,3})\.([0-9]{1,3})$/i.test(ip) ||
-  /^(::f{4}:)?169\.254\.([0-9]{1,3})\.([0-9]{1,3})$/i.test(ip) ||
-  /^f[cd][0-9a-f]{2}:/i.test(ip) ||
-  /^fe80:/i.test(ip) ||
-  /^::1$/.test(ip) ||
-  /^::$/.test(ip);
-    if (isIpV4Addr.test(host))
-        hostIP = host;
-    else
-        hostIP = dnsResolve(host);
-    // IP could not be determined -> go to proxy
-    if (hostIP == 0)
-        return "127.0.0.1:8118";
-    // These 3 scopes are used only internally
-    if (shExpMatch(hostIP, "92.53.*") ||
-        shExpMatch(hostIP, "192.168.*") ||
-        shExpMatch(hostIP, "127.0.0.1"))
+// User-supplied FindProxyForURL()
+function FindProxyForURL(url, host)
+{
+if (
+   isPlainHostName(host) ||
+   shExpMatch(host, "10.*") ||
+   shExpMatch(host, "172.16.*") ||
+   shExpMatch(host, "192.168.*") ||
+   shExpMatch(host, "127.*") ||
+   dnsDomainIs(host, ".LOCAL") ||
+   dnsDomainIs(host, ".local") ||
+   (url.substring(0,4) == "ftp:")
+)
         return "DIRECT";
-    // Eveything else goes through the proxy
-    return "127.0.0.8118;";
-}
-
+else
+        return EasyListFindProxyForURL(url, host);
+}   
 var PROXY = 'HTTP 127.0.0.1:8118;SOCKS 127.0.0.1:9050';
 var normal = 127.0.0.1:8118";                
 var blackhole_ip_port = "1.1.1.1:53";      
 var blackhole_ip_port = "127.0.0.1:8119";   
+var blackhole_ip_port = "127.0.0.1:53";
+var blackhole_ip_port = "9.9.9.9:53";
 var good_da_host_JSON = { "apple.com": null,
 "icloud.com": null,
 "apple-dns.net": null,
@@ -3148,41 +3130,20 @@ function EasyListFindProxyForURL(url, host)
     return proxy;
 }
 
-function FindProxyForURL(url, host) {
-    // NetBIOS-names
-    if (isPlainHostName(host))
-        return "127.0.0.1:8118";
-    // change to lower case, if not already been done
-    host = host.toLowerCase();
-    // internal DNS-suffixes
-    if (shExpMatch(host, "*.cloudflare.com") ||
-        shExpMatch(host, "*.dns.quad9.net"))
-        return "127.0.0.1:8118";
-    // Save the IP-address to variable hostIP
-    var hostIP;
-    var isIpV4Addr = /^(::f{4}:)?10\.([0-9]{1,3})\.([0-9]{1,3})\.([0-9]{1,3})$/i.test(ip) ||
-  /^(::f{4}:)?192\.168\.([0-9]{1,3})\.([0-9]{1,3})$/i.test(ip) ||
-  /^(::f{4}:)?172\.(1[6-9]|2\d|30|31)\.([0-9]{1,3})\.([0-9]{1,3})$/i.test(ip) ||
-  /^(::f{4}:)?127\.([0-9]{1,3})\.([0-9]{1,3})\.([0-9]{1,3})$/i.test(ip) ||
-  /^(::f{4}:)?169\.254\.([0-9]{1,3})\.([0-9]{1,3})$/i.test(ip) ||
-  /^f[cd][0-9a-f]{2}:/i.test(ip) ||
-  /^fe80:/i.test(ip) ||
-  /^::1$/.test(ip) ||
-  /^::$/.test(ip);
-    if (isIpV4Addr.test(host))
-        hostIP = host;
-    else
-        hostIP = dnsResolve(host);
-    // IP could not be determined -> go to proxy
-    if (hostIP == 0)
-        return "127.0.0.1:8118";
-    // These 3 scopes are used only internally
-    if (shExpMatch(hostIP, "92.53.*") ||
-        shExpMatch(hostIP, "192.168.*") ||
-        shExpMatch(hostIP, "127.0.0.1"))
+// User-supplied FindProxyForURL()
+function FindProxyForURL(url, host)
+{
+if (
+   isPlainHostName(host) ||
+   shExpMatch(host, "10.*") ||
+   shExpMatch(host, "172.16.*") ||
+   shExpMatch(host, "192.168.*") ||
+   shExpMatch(host, "127.*") ||
+   dnsDomainIs(host, ".LOCAL") ||
+   dnsDomainIs(host, ".local") ||
+   (url.substring(0,4) == "ftp:")
+)
         return "DIRECT";
-    // Eveything else goes through the proxy
-    return "127.0.0.8118;";
-}
-
-
+else
+        return EasyListFindProxyForURL(url, host);
+}   
