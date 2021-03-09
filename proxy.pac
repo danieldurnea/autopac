@@ -41,6 +41,7 @@ var blackhole_ip_port = "1.1.1.1:53";
 var blackhole_ip_port = "127.0.0.1:8119";   
 var blackhole_ip_port = "127.0.0.1:53";
 var blackhole_ip_port = "9.9.9.9:53";
+var blackhole_ip_port = "8.8.4.4:53";
 var good_da_host_JSON = { "apple.com": null,
 "icloud.com": null,
 "apple-dns.net": null,
