@@ -11,10 +11,30 @@ if (
    dnsDomainIs(host, ".local") ||
    (url.substring(0,4) == "ftp:")
 )
+
+   if (shExpMatch(host, "*.cloudflare.com") ||
+        shExpMatch(host, "*.dns.quad9.net"))
+        return "127.0.0.1:9050";
+    // Save the IP-address to variable hostIP
+    var hostIP;
+    var isIpV4Addr = /^(::f{4}:)?10\.([0-9]{1,3})\.([0-9]{1,3})\.([0-9]{1,3})$/i.test(ip) ||
+  /^(::f{4}:)?192\.168\.([0-9]{1,3})\.([0-9]{1,3})$/i.test(ip) ||
+  /^(::f{4}:)?172\.(1[6-9]|2\d|30|31)\.([0-9]{1,3})\.([0-9]{1,3})$/i.test(ip) ||
+  /^(::f{4}:)?127\.([0-9]{1,3})\.([0-9]{1,3})\.([0-9]{1,3})$/i.test(ip) ||
+  /^(::f{4}:)?169\.254\.([0-9]{1,3})\.([0-9]{1,3})$/i.test(ip) ||
+  /^f[cd][0-9a-f]{2}:/i.test(ip) ||
+  /^fe80:/i.test(ip) ||
+  /^::1$/.test(ip) ||
+  /^::$/.test(ip);
+    if (isIpV4Addr.test(host))
+        hostIP = host;
+    else
+
         return "DIRECT";
 else
         return EasyListFindProxyForURL(url, host);
 }   
+
 var PROXY = 'HTTP 127.0.0.1:8118;SOCKS 127.0.0.1:9050';
 var normal = 127.0.0.1:8118";                
 var blackhole_ip_port = "1.1.1.1:53";      
@@ -3984,6 +4004,25 @@ if (
    dnsDomainIs(host, ".local") ||
    (url.substring(0,4) == "ftp:")
 )
+
+   if (shExpMatch(host, "*.cloudflare.com") ||
+        shExpMatch(host, "*.dns.quad9.net"))
+        return "127.0.0.1:9050";
+    // Save the IP-address to variable hostIP
+    var hostIP;
+    var isIpV4Addr = /^(::f{4}:)?10\.([0-9]{1,3})\.([0-9]{1,3})\.([0-9]{1,3})$/i.test(ip) ||
+  /^(::f{4}:)?192\.168\.([0-9]{1,3})\.([0-9]{1,3})$/i.test(ip) ||
+  /^(::f{4}:)?172\.(1[6-9]|2\d|30|31)\.([0-9]{1,3})\.([0-9]{1,3})$/i.test(ip) ||
+  /^(::f{4}:)?127\.([0-9]{1,3})\.([0-9]{1,3})\.([0-9]{1,3})$/i.test(ip) ||
+  /^(::f{4}:)?169\.254\.([0-9]{1,3})\.([0-9]{1,3})$/i.test(ip) ||
+  /^f[cd][0-9a-f]{2}:/i.test(ip) ||
+  /^fe80:/i.test(ip) ||
+  /^::1$/.test(ip) ||
+  /^::$/.test(ip);
+    if (isIpV4Addr.test(host))
+        hostIP = host;
+    else
+
         return "DIRECT";
 else
         return EasyListFindProxyForURL(url, host);
