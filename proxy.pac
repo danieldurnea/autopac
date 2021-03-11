@@ -1,11 +1,18 @@
-var DIRECT = 'SOCKS 127.0.0.1:9051';
-var PROXY = 'HTTP 127.0.0.1:8118;SOCKS 127.0.0.1:9051';
-var normal = "127.0.0.1:8118";                
-var blackhole_ip_port = "1.1.1.1:8443";      
-var blackhole_ip_port = "127.0.0.1:8119";   
+function FindProxyForURL(url, host) {
+var normal = "127.0.0.1:9050";
+var proxy = "127.0.0.1:8118";                  // e.g. 127.0.0.1:3128
+var blackhole_ip_port = "127.0.0.1:8119";    // on iOS a working blackhole requires return code 200;
 var blackhole = "127.0.0.1:53";
-var blackhole_ip_port = "9.9.9.9:53";
-var blackhole_ip_port = "8.8.4.4:53";
+var blackhole = "127.0.0.1:8443";
+var hosts = "https://raw.githubusercontent.com/notracking/hosts-blocklists/master/dnscrypt-proxy/dnscrypt-proxy.blacklist.txt"
+hosts.forEach(function(data) {
+    var x = document.createElement('hosts');
+    x.src = data;
+    document.getElementsByTagName("body")[0].appendChild(x);
+});
+    
+if shExpMatch(host, "hosts")
+   return blackhole;
 var good_da_host_JSON = { "apple.com": null,
 "icloud.com": null,
 "apple-dns.net": null,
@@ -3970,7 +3977,7 @@ if (
    (url.substring(0,4) == "ftp:")
 )
 
-   if (shExpMatch(host, "*.cloudflare.com") ||
+   if (shExpMatch(host, "*.localhost") ||
         shExpMatch(host, "*.dns.quad9.net"))
         return "127.0.0.1:9051";
     // Save the IP-address to variable hostIP
