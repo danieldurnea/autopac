@@ -1,8 +1,8 @@
 function FindProxyForURL(url, host) {
-var normal = "127.0.0.1:9051";
+var normal = "127.0.0.1:8443";
 var proxy = "127.0.0.1:8118";                  
 var blackhole = "127.0.0.1:53";
-var blackhole = "127.0.0.1:8443";
+var blackhole = "8.8.8.8:53";
 var hosts = "https://raw.githubusercontent.com/notracking/hosts-blocklists/master/dnscrypt-proxy/dnscrypt-proxy.blacklist.txt"
 hosts.forEach(function(data) {
     var x = document.createElement('hosts');
