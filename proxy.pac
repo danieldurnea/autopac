@@ -54,6 +54,9 @@ if shExpMatch(host, "hosts")
 	"torrentz.eu",
 	"yify-torrents.com"
     
+     }
+  } 
+}
 var good_da_host_JSON = { "apple.com": null,
 "icloud.com": null,
 "apple-dns.net": null,
