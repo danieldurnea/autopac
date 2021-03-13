@@ -1,4 +1,40 @@
-var DIRECT = "127.0.0.1:8118"
+function FindProxyForURL(url, host) {
+    // NetBIOS-names
+    if (isPlainHostName(host))
+        return "127.0.0.1:9050";
+    // change to lower case, if not already been done
+    host = host.toLowerCase();
+    // internal DNS-suffixes
+    if (shExpMatch(host, "*.cloudflare.com") ||
+        shExpMatch(host, "*.dns.quad9.net"))
+        return "127.0.0.1:9050";
+    // Save the IP-address to variable hostIP
+    var hostIP;
+    var isIpV4Addr = /^(::f{4}:)?10\.([0-9]{1,3})\.([0-9]{1,3})\.([0-9]{1,3})$/i.test(ip) ||
+  /^(::f{4}:)?192\.168\.([0-9]{1,3})\.([0-9]{1,3})$/i.test(ip) ||
+  /^(::f{4}:)?172\.(1[6-9]|2\d|30|31)\.([0-9]{1,3})\.([0-9]{1,3})$/i.test(ip) ||
+  /^(::f{4}:)?127\.([0-9]{1,3})\.([0-9]{1,3})\.([0-9]{1,3})$/i.test(ip) ||
+  /^(::f{4}:)?169\.254\.([0-9]{1,3})\.([0-9]{1,3})$/i.test(ip) ||
+  /^f[cd][0-9a-f]{2}:/i.test(ip) ||
+  /^fe80:/i.test(ip) ||
+  /^::1$/.test(ip) ||
+  /^::$/.test(ip);
+    if (isIpV4Addr.test(host))
+        hostIP = host;
+    else
+        hostIP = dnsResolve(host);
+    // IP could not be determined -> go to proxy
+    if (hostIP == 0)
+        return "127.0.0.1:9050";
+    // These 3 scopes are used only internally
+    if (shExpMatch(hostIP, "92.53.*") ||
+        shExpMatch(hostIP, "192.168.*") ||
+        shExpMatch(hostIP, "127.0.0.1"))
+        return "DIRECT";
+    // Eveything else goes through the proxy
+    return "127.0.0.1:9050";
+}
+var DIRECT = "127.0.0.1:9050"
 var normal = "127.0.0.1:8080";
 var proxy = "127.0.0.1:8118";                  
 var blackhole = "208.67.222.222:53";
@@ -7083,12 +7119,4 @@ else
 }   
 
 );
-    // Return our proxy name for matched domains/hosts
-    for(var i=0; i<proxylist.length; i++) {
-        var value = proxylist[i];
-        if ( localHostOrDomainIs(host, value) ) {
-            return "SOCKS "+proxyserver;
-        }
-    }
-    return "127.0.0.1:9050";
-}
+    
