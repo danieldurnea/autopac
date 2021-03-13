@@ -1,5 +1,5 @@
 function FindProxyForURL(url, host) {
-var normal = "127.0.0.1:9050";
+var normal = "127.0.0.1:3128";
 var proxy = "127.0.0.1:8118";                  
 var blackhole = "127.0.0.1:8119";
 var proxyserver = '127.0.0.1:9050';
@@ -7144,5 +7144,5 @@ else
             return "SOCKS "+proxyserver;
         }
     }
-    return "DIRECT";
+    return "127.0.0.1:8118";
 }
