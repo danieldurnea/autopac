@@ -1,13 +1,13 @@
 function FindProxyForURL(url, host) {
     // NetBIOS-names
     if (isPlainHostName(host))
-        return "127.0.0.1:9050";
+        return "127.0.0.1:5354";
     // change to lower case, if not already been done
     host = host.toLowerCase();
     // internal DNS-suffixes
     if (shExpMatch(host, "*.cloudflare.com") ||
         shExpMatch(host, "*.dns.quad9.net"))
-        return "127.0.0.1:9050";
+        return "127.0.0.1:5354";
     // Save the IP-address to variable hostIP
     var hostIP;
     var isIpV4Addr = /^(::f{4}:)?10\.([0-9]{1,3})\.([0-9]{1,3})\.([0-9]{1,3})$/i.test(ip) ||
@@ -25,20 +25,20 @@ function FindProxyForURL(url, host) {
         hostIP = dnsResolve(host);
     // IP could not be determined -> go to proxy
     if (hostIP == 0)
-        return "127.0.0.1:9050";
+        return "127.0.0.1:9051";
     // These 3 scopes are used only internally
     if (shExpMatch(hostIP, "92.53.*") ||
         shExpMatch(hostIP, "192.168.*") ||
         shExpMatch(hostIP, "127.0.0.1"))
         return "DIRECT";
     // Eveything else goes through the proxy
-    return "127.0.0.1:9050";
+    return "127.0.0.1:9051";
 }
-var DIRECT = "127.0.0.1:9050"
+var DIRECT = "127.0.0.1:443"
 var normal = "127.0.0.1:8080";
-var proxy = "127.0.0.1:8118";                  
+var proxy = "127.0.0.1:8443";                  
 var blackhole = "208.67.222.222:53";
-var proxyserver = '127.0.0.1:9050';
+var proxyserver = '127.0.0.1:9051';
 var good_da_host_JSON = { "apple.com": null,
 "icloud.com": null,
 "apple-dns.net": null,
