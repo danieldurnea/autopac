@@ -1,8 +1,4 @@
-function FindProxyForURL(url, host) {
-    if (dnsDomainIs(host, ".i2p")) { return "HTTP localhost:127.0.0.1:8118"; }
-    if (dnsDomainIs(host, ".onion")) { return "SOCKS localhost:9050"; }
-    return "DIRECT";
-}
+var DIRECT = "127.0.0.1:443"
 var normal = "127.0.0.1:8443";
 var proxy = "127.0.0.1:8118";                  
 var blackhole = "127.0.0.1:8119";
