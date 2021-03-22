@@ -1,7 +1,7 @@
-var PROXY = 'HTTP 127.0.0.1:8080;SOCKS 127.0.0.1:1080';
-var normal = "127.0.0.1:8080";          
+var PROXY = 'HTTP 127.0.0.1:8888;SOCKS 127.0.0.1:9050';
+var normal = "127.0.0.1:9050";          
 var direct = "127.0.0.1:8118";   
-var blackhole_ip_port = "1.1.1.2:53";      
+var blackhole = "1.1.1.1:853";      
 var blackhole = "1.1.1.2:53";   
 var proxy_server = "127.0.0.1:8118";
 var good_da_host_JSON = { "apple.com": null,
