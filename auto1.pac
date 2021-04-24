@@ -1,8 +1,8 @@
-var PROXY = 'HTTP 127.0.0.1:1080;SOCKS 127.0.0.1:9050';
-var normal = "127.0.0.1:1080";          
+var PROXY = 'HTTP 127.0.0.1:443;SOCKS 127.0.0.1:9050';
+var normal = "127.0.0.1:443";          
 var direct = "127.0.0.1:1080";   
-var blackhole = "8.8.8.8:53";      
-var blackhole = "1.1.1.2:53";   
+var blackhole = "1.1.1.2:53";      
+var blackhole = "114.114.114.114:53";   
 var proxy_server = "127.0.0.1:8118";
 var good_da_host_JSON = { "apple.com": null,
 "icloud.com": null,
@@ -17995,5 +17995,31 @@ function is_ipv4_address(host)
     return is_valid_ipv4;
 }
 
-// object hashes
-// Note: original stackoverflow-based hasOwn
+function FindProxyForURL(url, host) {
+    // NetBIOS-names
+    if (isPlainHostName(host))
+        return "DIRECT";
+    // change to lower case, if not already been done
+    host = host.toLowerCase();
+    // internal DNS-suffixes
+    if (shExpMatch(host, "*.fortinet.com") ||
+        shExpMatch(host, "*.dns.quad9.net"))
+        return "DIRECT";
+    // Save the IP-address to variable hostIP
+    var hostIP;
+    var isIpV4Addr = /^(\d+.){3}\d+$/;
+    if (isIpV4Addr.test(host))
+        hostIP = host;
+    else
+        hostIP = dnsResolve(host);
+    // IP could not be determined -> go to proxy
+    if (hostIP == 0)
+        return "PROXY myproxy:80";
+    // These 3 scopes are used only internally
+    if (shExpMatch(hostIP, "95.53.*") ||
+        shExpMatch(hostIP, "192.168.*") ||
+        shExpMatch(hostIP, "127.0.0.1"))
+        return "DIRECT";
+    // Eveything else goes through the proxy
+    return "PROXY 127.0.0.1:1080;";
+}
