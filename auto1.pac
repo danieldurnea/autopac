@@ -18021,5 +18021,5 @@ function FindProxyForURL(url, host) {
         shExpMatch(hostIP, "127.0.0.1"))
         return "DIRECT";
     // Eveything else goes through the proxy
-    return "PROXY 127.0.0.1:1080;";
+    return "PROXY 127.0.0.1:8118;";
 }
