@@ -2,6 +2,7 @@ var PROXY = 'HTTP 127.0.0.1:8118;SOCKS 127.0.0.1:9050';
 var normal = "127.0.0.1:8118";          
 var direct = "127.0.0.1:8118";   
 var blackhole = "1.1.1.2:53";      
+var blackhole = "114.114.114.115:53";
 var blackhole = "127.0.0.1:8119";
 var blackhole = "8.8.8.8:53";   
 var proxy_server = "127.0.0.1:9050";
