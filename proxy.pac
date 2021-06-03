@@ -1,9 +1,9 @@
-var PROXY = 'HTTP 127.0.0.1:8118;SOCKS 127.0.0.1:9050';
+var PROXY = 'DIRECT';
 var normal = "127.0.0.1:9050";          
-var direct = "localhost:8118";   
-var blackhole = " 208.67.222.222:53";      
-var blackhole = "208.67.220.220:53";   
-var proxy_server = "127.0.0.1:8443";
+var direct = "DIRECT";   
+var blackhole = "8.8.8.8:53";      
+var blackhole = "8.8.4.4:53";   
+var proxy_server = "127.0.0.1:8119";
 var good_da_host_JSON = { "apple.com": null,
 "icloud.com": null,
 "apple-dns.net": null,
